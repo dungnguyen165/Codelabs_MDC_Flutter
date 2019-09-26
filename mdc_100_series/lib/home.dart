@@ -16,9 +16,9 @@ import 'package:Shrine/model/product.dart';
 import 'package:Shrine/model/products_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'supplemental/asymmetric_view.dart';
 
 class HomePage extends StatelessWidget {
-  // TODO: Make a collection of cards (102)
   List<Card> _buildGridCards(BuildContext context) {
     List<Product> products = ProductsRepository.loadProducts(Category.all);
 
@@ -32,9 +32,10 @@ class HomePage extends StatelessWidget {
 
     return products.map((product) {
       return Card(
+        elevation: 0.0,
         clipBehavior: Clip.antiAlias,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             AspectRatio(
               aspectRatio: 18 / 11,
@@ -50,17 +51,20 @@ class HomePage extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 8.0),
                 child: Column(
                   //TODO: Align labels to the bottom and center
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      product.name,
-                      style: theme.textTheme.title,
+                      product == null ? '' : product.name,
+                      style: theme.textTheme.button,
+                      softWrap: false,
+                      overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),
-                    SizedBox(height: 8.0),
+                    SizedBox(height: 4.0),
                     Text(
-                      formatter.format(product.price),
-                      style: theme.textTheme.body2,
+                      product == null ? '' : formatter.format(product.price),
+                      style: theme.textTheme.caption,
                     ),
                   ],
                 ),
@@ -100,54 +104,83 @@ class HomePage extends StatelessWidget {
 //    return cards;
   }
 
-  // TODO: Add a variable for Category (104)
   @override
   Widget build(BuildContext context) {
     // TODO: Return an AsymmetricView (104)
     // TODO: Pass Category variable to AsymmetricView (104)
     return Scaffold(
-      // TODO: Add app bar (102)
       appBar: AppBar(
+        brightness: Brightness.dark,
         leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            semanticLabel: 'menu',
-          ),
+          icon: Icon(Icons.menu),
           onPressed: () {
-            print("Menu button");
+            print('Menu button');
           },
         ),
-        title: Text("SHRINE"),
+        title: Text('SHRINE'),
         actions: <Widget>[
           IconButton(
-            icon: Icon(
-              Icons.search,
-              semanticLabel: 'search',
-            ),
+            icon: Icon(Icons.search),
             onPressed: () {
-              print("Search button");
+              print('Search button');
             },
           ),
           IconButton(
-            icon: Icon(
-              Icons.tune,
-              semanticLabel: 'filter',
-            ),
+            icon: Icon(Icons.tune),
             onPressed: () {
-              print("Filter button");
+              print('Filter button');
             },
           ),
         ],
       ),
-      // TODO: Add a grid view (102)
-      body: GridView.count(
-        crossAxisCount: 2,
-        padding: EdgeInsets.all(16.0),
-        childAspectRatio: 8.0 / 9.0,
-        children: _buildGridCards(context),
-      ),
-      // TODO: Set resizeToAvoidBottomInset (101)
-      resizeToAvoidBottomInset: false,
+      body: AsymmetricView(products: ProductsRepository.loadProducts(Category.all)),
     );
   }
+
+//  @override
+//  Widget build(BuildContext context) {
+//    // TODO: Return an AsymmetricView (104)
+//    // TODO: Pass Category variable to AsymmetricView (104)
+//    return Scaffold(
+//      appBar: AppBar(
+//        leading: IconButton(
+//          icon: Icon(
+//            Icons.menu,
+//            semanticLabel: 'menu',
+//          ),
+//          onPressed: () {
+//            print("Menu button");
+//          },
+//        ),
+//        title: Text("SHRINE"),
+//        actions: <Widget>[
+//          IconButton(
+//            icon: Icon(
+//              Icons.search,
+//              semanticLabel: 'search',
+//            ),
+//            onPressed: () {
+//              print("Search button");
+//            },
+//          ),
+//          IconButton(
+//            icon: Icon(
+//              Icons.tune,
+//              semanticLabel: 'filter',
+//            ),
+//            onPressed: () {
+//              print("Filter button");
+//            },
+//          ),
+//        ],
+//      ),
+//      body: GridView.count(
+//        crossAxisCount: 2,
+//        padding: EdgeInsets.all(16.0),
+//        childAspectRatio: 8.0 / 9.0,
+//        children: _buildGridCards(context),
+//      ),
+//      resizeToAvoidBottomInset: false,
+//    );
+//  }
 }
